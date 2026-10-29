@@ -24,12 +24,14 @@ Run the tool (the examples below call this `ampwhy`):
 java -cp target/classes io.github.gulliby.ampwhy.Main
 ```
 
+`mvn -B verify` also builds `target/ampwhy-0.1.0.jar`, which starts the same program: `java -jar target/ampwhy-0.1.0.jar`.
+
 ## Usage
 
 ```
 usage: ampwhy decode [--attr] [--strict] FILE
        ampwhy explain [--attr] FILE
-       ampwhy check [--attr] FILE...
+       ampwhy check [--attr] [--summary] FILE...
        ampwhy encode [--mode minimal|named|numeric] [--attr] FILE
        ampwhy names [PREFIX]
 ```
@@ -128,6 +130,7 @@ ampwhy: nofile.txt: cannot read the file
 | Option | Command | Description |
 |---|---|---|
 | `--attr` | decode, explain, check, encode | read the text as an attribute value |
+| `--summary` | check | print only the last line of the report (the problem count or the `ok` line); the exit code is unchanged |
 | `--strict` | decode | exit 1 when any reading has a problem; the text is still written |
 | `--mode minimal\|named\|numeric` or `--mode=named` | encode | how much to escape (default `minimal`) |
 

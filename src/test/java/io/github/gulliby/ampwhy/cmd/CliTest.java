@@ -39,7 +39,7 @@ class CliTest {
         assertEquals(0, Cli.run(List.of("--help"), help));
         assertEquals("usage: ampwhy decode [--attr] [--strict] FILE\n"
                 + "       ampwhy explain [--attr] FILE\n"
-                + "       ampwhy check [--attr] FILE...\n"
+                + "       ampwhy check [--attr] [--summary] FILE...\n"
                 + "       ampwhy encode [--mode minimal|named|numeric] [--attr] FILE\n"
                 + "       ampwhy names [PREFIX]\n", help.out.toString());
         assertEquals("", help.err.toString());

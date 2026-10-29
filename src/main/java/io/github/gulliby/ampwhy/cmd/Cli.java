@@ -13,7 +13,7 @@ import java.util.Set;
 public final class Cli {
     private static final String HELP = "usage: ampwhy decode [--attr] [--strict] FILE\n"
             + "       ampwhy explain [--attr] FILE\n"
-            + "       ampwhy check [--attr] FILE...\n"
+            + "       ampwhy check [--attr] [--summary] FILE...\n"
             + "       ampwhy encode [--mode minimal|named|numeric] [--attr] FILE\n"
             + "       ampwhy names [PREFIX]\n";
 
@@ -39,8 +39,10 @@ public final class Cli {
             switch (command) {
                 case "decode" -> parsed = Options.parse(argv.subList(1, argv.size()),
                         Set.of("--attr", "--strict"), Set.of());
-                case "explain", "check" -> parsed = Options.parse(argv.subList(1, argv.size()),
+                case "explain" -> parsed = Options.parse(argv.subList(1, argv.size()),
                         Set.of("--attr"), Set.of());
+                case "check" -> parsed = Options.parse(argv.subList(1, argv.size()),
+                        Set.of("--attr", "--summary"), Set.of());
                 case "encode" -> parsed = Options.parse(argv.subList(1, argv.size()),
                         Set.of("--attr"), Set.of("--mode"));
                 case "names" -> parsed = Options.parse(argv.subList(1, argv.size()), Set.of(), Set.of());

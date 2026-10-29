@@ -25,6 +25,12 @@ public final class CheckCommand {
         for (String arg : args) {
             sources.add(inputs.read(arg));
         }
-        return Checker.check(sources, flags.contains("--attr"));
+        Output report = Checker.check(sources, flags.contains("--attr"));
+        if (!flags.contains("--summary")) {
+            return report;
+        }
+        String text = report.out();
+        int start = text.lastIndexOf('\n', text.length() - 2) + 1;
+        return new Output(text.substring(start), report.code());
     }
 }
