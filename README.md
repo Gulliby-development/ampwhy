@@ -31,7 +31,7 @@ java -cp target/classes io.github.gulliby.ampwhy.Main
 ```
 usage: ampwhy decode [--attr] [--strict] FILE
        ampwhy explain [--attr] FILE
-       ampwhy check [--attr] [--summary] FILE...
+       ampwhy check [--attr] [--summary] [--code CODES] FILE...
        ampwhy encode [--mode minimal|named|numeric] [--attr] FILE
        ampwhy names [PREFIX]
 ```
@@ -80,6 +80,23 @@ page.html:2:1: AW009 "&#x80;" is a control character, read as U+20AC
 page.html:2:8: AW006 "&#x110000;" is above U+10FFFF, read as U+FFFD
 page.html:2:19: AW001 missing semicolon after "&copy"
 8 problems in 1 file
+```
+
+`--code` limits the report to the problem codes you name, a comma-separated list of codes from AW001 to AW009. Other problems are not printed and not counted, and the exit code follows the problems that remain:
+
+```
+$ ampwhy check --code AW001,AW004 page.html
+page.html:1:6: AW001 missing semicolon after "&amp"
+page.html:1:28: AW004 missing semicolon after "&#65"
+page.html:2:19: AW001 missing semicolon after "&copy"
+3 problems in 1 file
+```
+
+A list with an unknown code is an error (exit 2) that is reported before any file is read:
+
+```
+$ ampwhy check --code AW10 page.html
+ampwhy: invalid --code "AW10" (expected problem codes AW001 to AW009 separated by commas)
 ```
 
 With `--attr` the text is read as an attribute value, where a legacy name without a semicolon that is followed by `=`, a letter or a digit is left alone:
@@ -131,6 +148,7 @@ ampwhy: nofile.txt: cannot read the file
 |---|---|---|
 | `--attr` | decode, explain, check, encode | read the text as an attribute value |
 | `--summary` | check | print only the last line of the report (the problem count or the `ok` line); the exit code is unchanged |
+| `--code CODES` or `--code=CODES` | check | report only the problems whose code is in the comma-separated list (AW001 to AW009); the `ok` line still counts every reference |
 | `--strict` | decode | exit 1 when any reading has a problem; the text is still written |
 | `--mode minimal\|named\|numeric` or `--mode=named` | encode | how much to escape (default `minimal`) |
 

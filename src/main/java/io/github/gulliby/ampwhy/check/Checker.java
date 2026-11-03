@@ -9,6 +9,7 @@ import io.github.gulliby.ampwhy.scan.Occurrence;
 import io.github.gulliby.ampwhy.scan.Scanner;
 
 import java.util.List;
+import java.util.Set;
 
 /** Builds an ordered report for the problems found in source text. */
 public final class Checker {
@@ -16,6 +17,11 @@ public final class Checker {
     }
 
     public static Output check(List<Inputs.Source> sources, boolean attr) {
+        return check(sources, attr, null);
+    }
+
+    /** Reports only the problems whose code is in {@code only}; null means every problem. */
+    public static Output check(List<Inputs.Source> sources, boolean attr, Set<String> only) {
         StringBuilder report = new StringBuilder();
         int problemCount = 0;
         int affectedSourceCount = 0;
@@ -32,6 +38,9 @@ public final class Checker {
                 var reading = occurrence.reading();
                 String consumed = Text.str(text, occurrence.start(), reading.end());
                 for (String code : reading.codes()) {
+                    if (only != null && !only.contains(code)) {
+                        continue;
+                    }
                     report.append(source.display())
                             .append(':')
                             .append(lines.line(occurrence.start()))
